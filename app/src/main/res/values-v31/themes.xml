@@ -1,0 +1,6 @@
+<resources>
+    <style name="Theme.RuleOfNines.Launch" parent="Theme.RuleOfNines">
+        <item name="android:windowSplashScreenBackground">@color/welcome_background</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+    </style>
+</resources>

@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">BurnMap 9</string>
     <string name="app_subtitle">ADULT RULE OF NINES • TBSA</string>
+    <string name="creator_credit">Made with ❤️ by Omar El-gazzar and Sol</string>
+    <string name="welcome_logo_description">BurnMap 9 logo</string>
+    <string name="welcome_continue">Open burn map</string>
 </resources>

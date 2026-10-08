@@ -1,26 +1,27 @@
-# BurnMap 9 v0.2 — engineering validation
+# BurnMap 9 v0.3 — engineering validation
 
-Validated on 2026-10-08. This is a debug-signed owner-testing build. Schematic anatomy and clinical suitability still require owner/clinician acceptance.
+Validated on 2026-10-08. Debug-signed owner-testing build; clinical/anatomical acceptance remains separate.
 
 | Gate | Result |
 |---|---|
-| Kotlin/Compose build and both APK assemblies | PASS |
+| Build and both APK assemblies | PASS |
 | Calculation unit tests | 12 passed |
-| HONOR DNY-NX9, Android 16/API 36 instrumentation | 25 passed |
-| Lint | 0 errors, 12 non-blocking warnings |
-| Packaged adaptive icon and Android 13 monochrome layer | PASS |
-| Application label and OEM launcher rendering | PASS |
-| Delivered, tested and installed APK identity | Matching SHA-256 |
+| HONOR DNY-NX9, Android 16/API 36 instrumentation | 26 passed |
+| Lint | 0 errors, 15 non-blocking warnings |
+| Welcome and native splash share launcher resource | PASS |
+| Exact bottom credit, portrait and landscape | PASS |
+| Tap-to-skip and calculator navigation/regressions | PASS |
+| Built, tested, installed and delivered APK identity | Matching SHA-256 |
 
-APK filename: `BurnMap9-v0.2-debug.apk`
-Application ID: `com.drsherif.ruleofnines`
-Version: 0.2, versionCode 2
-SHA-256: `18b0a6836e35102994ce7e9cd65737ef200f419eab63c1d9d562c107c459dc5b`
+- APK: `BurnMap9-v0.3-debug.apk`
+- Package: `com.drsherif.ruleofnines`
+- Version: 0.3, versionCode 3
+- SHA-256: `621068c975c1a1a1f8698badf4aeba9ee11f388478f5222fb45e9d183c3b1d9b`
 
-The v0.2 change adds native icon resources and branding, and increments the version. The seven previously AGY-reviewed clinical, graphics and concurrency implementation files remain byte-for-byte unchanged. No dependencies were added.
+The welcome screen reuses the actual manifest launcher XML. Android 12+ launch-theme configuration refers to that same icon, verified by resolving the live activity theme on Honor. The exact lower-edge text is **Made with ❤️ by Omar El-gazzar and Sol**. Portrait and landscape screenshots were visually inspected; automated checks confirm the credit lies within the lower safe area.
 
-The 25 phone tests cover real tap/drag drawing, independent front/back views, 50.5/49.5/100 totals, exact map/mask support, alpha thresholds, invalid inputs, overlapping/outside paint, immutable snapshots, cancellation, stale results, rotation, background/resume, clear confirmation, regional-list scrolling, landscape usability and canvas recomposition. The additional branding test inflates the actual compiled adaptive XML, verifies the monochrome layer and brand colors, and separately renders Honor's themed launcher drawable.
+The welcome automatically advances after 1.2 seconds and supports immediate tap-to-skip. Saveable session state prevents replay when resuming or rotating the calculator. Existing calculator tests wait for this real entry flow, then run their original drawing, analysis, lifecycle and integrity assertions. No test checks were suppressed.
 
-Raw XML reports, device identifiers, machine-specific paths, logs, screenshots and debug APKs are intentionally local under ignored `outputs/`. The public icon preview contains only generated branding artwork.
+All seven previously AGY-reviewed clinical/graphics/concurrency implementation files remain unchanged. No dependency, patient-data, map, weighting or calculation changes were made.
 
-Build and phone-test commands are documented in the [README](../README.md). APK signing uses a local debug key; no signing material is included in the repository. No production or clinical release is asserted.
+Raw device reports, serials, machine paths, screenshots, signing material and APKs remain local under ignored `outputs/`. No production or clinical release is asserted. See [README](../README.md) for the reproducible harness.

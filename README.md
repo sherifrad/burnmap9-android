@@ -13,9 +13,11 @@ Use JDK 17 and Android SDK 36. Set `sdk.dir` in `local.properties` for your mach
 ANDROID_SERIAL=<authorized-Honor-serial> ./gradlew :app:connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true
 ```
 
-Toolchain: Gradle 8.13, AGP 8.13.2, Kotlin and Compose compiler plugin 2.2.21, Compose BOM 2025.12.01; minimum Android 8/API 26, target API 36. Dependencies are pinned in the Gradle files. Version 0.2 is delivered locally as `BurnMap9-v0.2-debug.apk`, debug-signed for owner testing. The application package stays `com.drsherif.ruleofnines` for update continuity.
+Toolchain: Gradle 8.13, AGP 8.13.2, Kotlin and Compose compiler plugin 2.2.21, Compose BOM 2025.12.01; minimum Android 8/API 26, target API 36. Dependencies are pinned in the Gradle files. Version 0.3 is delivered locally as `BurnMap9-v0.3-debug.apk`, debug-signed for owner testing. The application package stays `com.drsherif.ruleofnines` for update continuity.
 
 ## Use
+
+On a fresh app session, the welcome screen shows the same launcher logo and the credit “Made with ❤️ by Omar El-gazzar and Sol” along the lower safe edge. It advances automatically after 1.2 seconds; tap anywhere to open the map immediately. It does not repeat when resuming or rotating the calculator.
 
 1. Select Front or Back. Anatomical patient right/left are labeled; the front view mirrors the viewer.
 2. Tap or drag over partial/full-thickness burned areas with the red brush. Adjust brush size as needed. Exclude superficial erythema.

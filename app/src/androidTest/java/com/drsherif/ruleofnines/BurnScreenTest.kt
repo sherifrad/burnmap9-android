@@ -9,6 +9,7 @@ import androidx.compose.ui.test.assertTextEquals
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToNode
@@ -23,10 +24,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import androidx.activity.compose.setContent
 import com.drsherif.ruleofnines.analysis.PixelCoverageAnalyzer
 import com.drsherif.ruleofnines.graphics.BitmapTransform
 import com.drsherif.ruleofnines.model.BodyView
 import com.drsherif.ruleofnines.ui.BurnViewModel
+import com.drsherif.ruleofnines.ui.WelcomeScreen
+import com.drsherif.ruleofnines.ui.theme.RuleOfNinesTheme
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
 import org.junit.Assert.assertEquals
@@ -35,12 +39,64 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertSame
 import org.junit.Assert.assertTrue
 import org.junit.Rule
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class BurnScreenTest {
     @get:Rule val rule = createAndroidComposeRule<MainActivity>()
+
+    @Before fun awaitWelcomeCompletion() {
+        rule.waitUntil(5_000) {
+            rule.onAllNodesWithTag("bodyCanvas").fetchSemanticsNodes().isNotEmpty()
+        }
+    }
+
+    @Test fun welcomeReusesLauncherLogoAndShowsExactCreditAtBottom() {
+        val credit = "Made with ❤️ by Omar El-gazzar and Sol"
+        var continued = false
+        fun showWelcome() {
+            rule.runOnUiThread {
+                rule.activity.setContent {
+                    RuleOfNinesTheme { WelcomeScreen(onContinue = { continued = true }) }
+                }
+            }
+            rule.waitForIdle()
+        }
+        fun verifyAndCapture(filename: String) {
+            rule.onNodeWithText(credit, useUnmergedTree = true).assertIsDisplayed()
+            rule.onNodeWithTag("welcomeLogo", useUnmergedTree = true).assertIsDisplayed()
+            val screen = rule.onNodeWithTag("welcomeScreen").fetchSemanticsNode().boundsInRoot
+            val footer = rule.onNodeWithTag("creatorCredit", useUnmergedTree = true).fetchSemanticsNode().boundsInRoot
+            assertTrue("Credit is not at the lower edge", footer.center.y > screen.top + screen.height * 0.8f)
+            assertTrue("Credit extends beyond the safe content edge", footer.bottom <= screen.bottom + 1f)
+            val bitmap = rule.onRoot().captureToImage().asAndroidBitmap()
+            val context = InstrumentationRegistry.getInstrumentation().targetContext
+            context.openFileOutput(filename, android.content.Context.MODE_PRIVATE).use {
+                assertTrue(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it))
+            }
+        }
+        showWelcome()
+        if (android.os.Build.VERSION.SDK_INT >= 31) {
+            val icon = android.util.TypedValue()
+            assertTrue(rule.activity.theme.resolveAttribute(android.R.attr.windowSplashScreenAnimatedIcon, icon, true))
+            assertEquals(rule.activity.applicationInfo.icon, icon.resourceId)
+        }
+        verifyAndCapture("welcome-portrait.png")
+        rule.onNodeWithTag("welcomeScreen").performClick()
+        assertTrue("Welcome cannot be skipped by tapping", continued)
+        rule.runOnUiThread { rule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE }
+        rule.waitUntil(10_000) {
+            rule.activity.resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE
+        }
+        showWelcome()
+        verifyAndCapture("welcome-landscape.png")
+        rule.runOnUiThread { rule.activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT }
+        rule.waitUntil(10_000) {
+            rule.activity.resources.configuration.orientation == android.content.res.Configuration.ORIENTATION_PORTRAIT
+        }
+    }
 
     @Test fun launcherIconLoadsAndMatchesBranding() {
         val context = InstrumentationRegistry.getInstrumentation().targetContext
