@@ -4,6 +4,12 @@
 
 Native Kotlin, Jetpack Compose and MVVM adult burn-area estimator. Front and back drawings are independent and analyzed together. No patient identifiers, database, network calls, or session persistence.
 
+## Download
+
+[Download BurnMap 9 v0.3 debug APK](https://github.com/sherifrad/burnmap9-android/releases/download/v0.3-debug/BurnMap9-v0.3-debug.apk) · [SHA-256 checksum](https://github.com/sherifrad/burnmap9-android/releases/download/v0.3-debug/BurnMap9-v0.3-debug.apk.sha256) · [Release details](https://github.com/sherifrad/burnmap9-android/releases/tag/v0.3-debug)
+
+This debug-signed prerelease requires Android 8/API 26 or later. Its validated source commit is `eab2adc50aba0a02db068023572631c0b76e24f3`. Expected APK SHA-256: `621068c975c1a1a1f8698badf4aeba9ee11f388478f5222fb45e9d183c3b1d9b`.
+
 ## Build
 
 Use JDK 17 and Android SDK 36. Set `sdk.dir` in `local.properties` for your machine.
@@ -13,7 +19,7 @@ Use JDK 17 and Android SDK 36. Set `sdk.dir` in `local.properties` for your mach
 ANDROID_SERIAL=<authorized-Honor-serial> ./gradlew :app:connectedDebugAndroidTest -Pandroid.injected.androidTest.leaveApksInstalledAfterRun=true
 ```
 
-Toolchain: Gradle 8.13, AGP 8.13.2, Kotlin and Compose compiler plugin 2.2.21, Compose BOM 2025.12.01; minimum Android 8/API 26, target API 36. Dependencies are pinned in the Gradle files. Version 0.3 is delivered locally as `BurnMap9-v0.3-debug.apk`, debug-signed for owner testing. The application package stays `com.drsherif.ruleofnines` for update continuity.
+Toolchain: Gradle 8.13, AGP 8.13.2, Kotlin and Compose compiler plugin 2.2.21, Compose BOM 2025.12.01; minimum Android 8/API 26, target API 36. Dependencies are pinned in the Gradle files. Version 0.3 is available as `BurnMap9-v0.3-debug.apk`, debug-signed for owner testing. The application package stays `com.drsherif.ruleofnines` for update continuity.
 
 ## Use
 
@@ -58,6 +64,6 @@ BurnMap 9 combines body mapping with the adult Rule of Nines. Its launcher icon 
 
 ## Validation
 
-See the [public validation summary](docs/VALIDATION.md). Detailed build logs, raw phone reports, screenshots and debug APKs are local development artifacts under ignored `outputs/`. They are excluded from the public repository, together with SDK paths, signing keys and credential files. Engineering validation is reported separately from owner anatomy/clinical acceptance.
+See the [public validation summary](docs/VALIDATION.md). The debug APK and checksum are published as GitHub release assets. Detailed build logs, raw phone reports and screenshots remain local under ignored `outputs/`; SDK paths, signing keys and credential files are also excluded from the public repository. Engineering validation is reported separately from owner anatomy/clinical acceptance.
 
 Public availability does not constitute clinical approval. No license grant is specified by this repository.
